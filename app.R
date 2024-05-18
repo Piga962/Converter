@@ -33,21 +33,34 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-  
+
+
     output$inputText <- renderUI({
-      HTML(paste("<pre>", input$text, "</pre>", sep = "\n"))
+      lines <- strsplit(input$text, "\n")[[1]]
+      HTML(paste("<pre>", substr(lines,1,1), "</pre>", sep = "\n"))
     })
     
     output$Converter <- renderPlot({
       lines <- strsplit(input$text, "\n")[[1]]
-      for(i in lines){
-        
-    }
-    x <- c("apple", "banana", "pear")
-    grepl("an",x)
-        
-      automaton <- graph(c("S","A", "S","B", "A","B", "A","Z", "B","Z"), directed = F)
-      edge.labels <- c("a", "b", "b", "c", "c")
+      liness <- strsplit(substr(input$text,nchar(input$text), nchar(input$text)), "\n")[[1]]
+      
+
+      print(liness)
+      automaton2 <- graph(c())
+      edge.labels2 <-c()
+      node.types2 <- c()
+      #for(i in lines){
+       #   print(i)
+#        print(substr(i,1,1))
+#        print(substr(i,nchar(i)-1,nchar(i)-1))
+#        print(substr(i,nchar(i), nchar(i)))
+      #}
+      
+      x <- c("apple", "banana", "pear")
+      grepl("an",x)
+      
+      automaton <- graph(c("S","A", "S","B", "A","B", "B","A", "A","Z", "B","Z"), directed = F)
+      edge.labels <- c("a", "b", "b", "a", "c", "c")
       node.types <- c(1,2,2,3)
       
       mapping.colors <- c("green", "gray", "red")
@@ -59,3 +72,4 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+

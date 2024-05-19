@@ -79,15 +79,8 @@ server <- function(input, output) {
         }
       }
       nNodes <- c(rep(2,length(Nodes)-2))
-      automaton2 <- graph(states, directed = F)
+      automaton2 <- graph(states, directed = T)
       node.types2 <-c(1,nNodes,3)
-      
-      x <- c("apple", "banana", "pear")
-      grepl("an",x)
-      
-      automaton <- graph(c("S","A", "S","B", "A","B", "B","A", "A","Z", "B","Z"), directed = F)
-      edge.labels <- c("a", "b", "b", "a", "c", "c")
-      #node.types <- c(1,2,3)
       
       mapping.colors <- c("green","gray", "red")
       node.colors <- mapping.colors[node.types2]

@@ -36,34 +36,28 @@ server <- function(input, output) {
 
 
     output$inputText <- renderUI({
-      #lines <- strsplit(input$text, "\n")[[1]]
-      #HTML(paste("<pre>", substr(lines,1,1), "</pre>", sep = "\n"))
       HTML(paste("<pre>", input$text, "</pre>", sep = "\n"))
     })
     
     output$Converter <- renderPlot({
       lines <- strsplit(input$text, "\n")[[1]]
-      #liness <- strsplit(substr(input$text,nchar(input$text), nchar(input$text)), "\n")[[1]]
-      
-      #print(liness)
-      
+
       states <-c()
       edge.labels2 <-c()
       node.types2 <- c()
       Nodes <- list()
-      node.types <- c(1,3)
       nNodes <- c()
-      
+      zVal <- 0
       for(i in lines){
-        if(grepl("[A-Z]",substr(i,1,1))){
+        if(grepl("[A-Z]",substr(i,1,1)) && grepl("[A-Z]",substr(i,nchar(i),nchar(i))) && grepl("[a-z]",substr(i,nchar(i)-1,nchar(i)-1))){
           firstState <- substr(i,1,1)
-        }
-        if(grepl("[A-Z]",substr(i,nchar(i),nchar(i)))){
-          lastState <- substr(i,nchar(i),nchar(i))
           transitionValue <- substr(i,nchar(i)-1,nchar(i)-1)
-        }else{
-          lastState <- "Z"
+          lastState <- substr(i,nchar(i),nchar(i))
+        }
+        if(grepl("[A-Z]",substr(i,1,1)) && grepl("[a-z]",substr(i,nchar(i),nchar(i)))){
+          firstState <- substr(i,1,1)
           transitionValue <- substr(i,nchar(i),nchar(i))
+          lastState <- "Z"
         }
         
         states <- c(states,firstState,lastState)
@@ -78,9 +72,26 @@ server <- function(input, output) {
           Nodes <- c(Nodes, substr(i,nchar(i),nchar(i)))
         }
       }
-      nNodes <- c(rep(2,length(Nodes)-2))
+
+      for(i in seq_along(states)){
+        print(i)
+        if(states[i] == "Z"){
+          zVal <- i
+          break
+        }
+      }
+
+      #zVal <- zVal/2
+      
+      nNodes <- c(rep(2,length(Nodes)-1))
+      node.types2 <-c(1,nNodes)
+      
+      if(zVal/2 <= length(node.types2)){
+        node.types2[zVal/2] <- 3
+      }
+      print(node.types2)
+      
       automaton2 <- graph(states, directed = T)
-      node.types2 <-c(1,nNodes,3)
       
       mapping.colors <- c("green","gray", "red")
       node.colors <- mapping.colors[node.types2]

@@ -74,21 +74,23 @@ server <- function(input, output) {
       }
 
       for(i in seq_along(states)){
-        print(i)
         if(states[i] == "Z"){
           zVal <- i
           break
         }
       }
+      print(zVal)
+      print(Nodes)
 
-      #zVal <- zVal/2
-      
       nNodes <- c(rep(2,length(Nodes)-1))
+      print(nNodes)
       node.types2 <-c(1,nNodes)
+      print(node.types2)
       
-      if(zVal/2 <= length(node.types2)){
-        node.types2[zVal/2] <- 3
+      if(zVal != 0){
+        node.types2[(zVal/2)+1] <- 3
       }
+      
       print(node.types2)
       
       automaton2 <- graph(states, directed = T)

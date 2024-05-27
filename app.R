@@ -53,11 +53,23 @@ server <- function(input, output) {
           firstState <- substr(i,1,1)
           transitionValue <- substr(i,nchar(i)-1,nchar(i)-1)
           lastState <- substr(i,nchar(i),nchar(i))
+          if(!substr(i,1,1) %in% Nodes){
+            Nodes <- c(Nodes, substr(i,1,1))
+          }
+          if(!substr(i,nchar(i),nchar(i)) %in% Nodes){
+            Nodes <- c(Nodes, substr(i,nchar(i),nchar(i)))
+          }
         }
         if(grepl("[A-Z]",substr(i,1,1)) && grepl("[a-z]",substr(i,nchar(i),nchar(i)))){
           firstState <- substr(i,1,1)
           transitionValue <- substr(i,nchar(i),nchar(i))
           lastState <- "Z"
+          if(!substr(i,1,1) %in% Nodes){
+            Nodes <- c(Nodes, substr(i,1,1))
+          }
+          if(!substr(i,nchar(i),nchar(i)) %in% Nodes){
+            Nodes <- c(Nodes, lastState)
+          }
         }
         
         states <- c(states,firstState,lastState)
@@ -65,16 +77,10 @@ server <- function(input, output) {
         edge.labels2 <- c(edge.labels2,transitionValue)
         print(edge.labels2)
         
-        if(!substr(i,1,1) %in% Nodes){
-          Nodes <- c(Nodes, substr(i,1,1))
-        }
-        if(!substr(i,nchar(i),nchar(i)) %in% Nodes){
-          Nodes <- c(Nodes, substr(i,nchar(i),nchar(i)))
-        }
       }
 
-      for(i in seq_along(states)){
-        if(states[i] == "Z"){
+      for(i in seq_along(Nodes)){
+        if(Nodes[i] == "Z"){
           zVal <- i
           break
         }
@@ -87,9 +93,7 @@ server <- function(input, output) {
       node.types2 <-c(1,nNodes)
       print(node.types2)
       
-      if(zVal != 0){
-        node.types2[(zVal/2)+1] <- 3
-      }
+      node.types2[zVal] <- 3
       
       print(node.types2)
       
